@@ -18,283 +18,60 @@
     --red: #8b2020;
     --radius: 3px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'DM Mono', monospace;
-    background: var(--paper);
-    color: var(--ink);
-    font-size: 13px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    min-height: 100vh;
-  }
-
-  h1 {
-    font-family: 'Fraunces', serif;
-    font-weight: 200;
-    font-style: italic;
-    font-size: 1.8rem;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-  }
-
-  h2 {
-    font-family: 'Fraunces', serif;
-    font-weight: 200;
-    font-style: italic;
-    font-size: 1.2rem;
-  }
-
-  .label {
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  input, textarea {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.8rem;
-    background: var(--paper2);
-    border: 1px solid var(--rule);
-    color: var(--ink);
-    padding: 0.6rem 0.75rem;
-    border-radius: var(--radius);
-    outline: none;
-    width: 100%;
-    transition: border-color 0.15s;
-  }
+  body { font-family: 'DM Mono', monospace; background: var(--paper); color: var(--ink); font-size: 13px; line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+  h1 { font-family: 'Fraunces', serif; font-weight: 200; font-style: italic; font-size: 1.8rem; letter-spacing: -0.02em; line-height: 1.1; }
+  h2 { font-family: 'Fraunces', serif; font-weight: 200; font-style: italic; font-size: 1.2rem; }
+  .label { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  input, textarea { font-family: 'DM Mono', monospace; font-size: 0.8rem; background: var(--paper2); border: 1px solid var(--rule); color: var(--ink); padding: 0.6rem 0.75rem; border-radius: var(--radius); outline: none; width: 100%; transition: border-color 0.15s; }
   input:focus, textarea:focus { border-color: var(--ink); }
-
-  .btn {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
-    padding: 0.65rem 1.25rem;
-    border-radius: var(--radius);
-    cursor: pointer;
-    border: none;
-    transition: opacity 0.15s;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    text-decoration: none;
-  }
+  .btn { font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.06em; padding: 0.65rem 1.25rem; border-radius: var(--radius); cursor: pointer; border: none; transition: opacity 0.15s; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; text-decoration: none; }
   .btn:hover { opacity: 0.85; }
   .btn:disabled { opacity: 0.4; cursor: default; }
   .btn-primary { background: var(--ink); color: var(--paper); }
   .btn-ghost { background: none; border: 1px solid var(--rule); color: var(--muted); }
   .btn-full { width: 100%; }
-
   .field { display: flex; flex-direction: column; gap: 0.3rem; }
   .error { font-size: 0.72rem; color: var(--red); display: none; }
   .success { font-size: 0.72rem; color: var(--green); display: none; }
-
-  /* LAYOUT */
-  .site-header {
-    border-bottom: 1px solid var(--rule);
-    padding: 1rem 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
+  .site-header { border-bottom: 1px solid var(--rule); padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
   .site-header h1 { font-size: 1.2rem; }
   .site-header p { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
-
-  .wrap {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem;
-  }
-
-  /* PROFILE PAGE */
-  #profile-page { display: none; }
-
-  .profile-header {
-    margin-bottom: 2rem;
-  }
-
-  .profile-display-name {
-    font-family: 'Fraunces', serif;
-    font-weight: 200;
-    font-style: italic;
-    font-size: 2rem;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.25rem;
-  }
-
-  .profile-username {
-    font-size: 0.7rem;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-  }
-
-  .profile-bio {
-    margin-top: 1rem;
-    font-size: 0.8rem;
-    line-height: 1.8;
-    color: var(--ink);
-    white-space: pre-wrap;
-  }
-
-  .profile-logo {
-    width: 100%;
-    max-height: 160px;
-    object-fit: contain;
-    margin-bottom: 1.5rem;
-    display: none;
-  }
-
-  .receipt-divider {
-    border: none;
-    border-top: 1px dashed var(--rule);
-    margin: 1.5rem 0;
-  }
-
-  .send-box {
-    background: var(--paper2);
-    border: 1px solid var(--rule);
-    border-radius: var(--radius);
-    padding: 1.25rem;
-  }
-
-  .send-box h2 {
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    font-family: 'DM Mono', monospace;
-    font-style: normal;
-    font-weight: 400;
-    margin-bottom: 0.75rem;
-  }
-
-  .send-box textarea {
-    min-height: 100px;
-    margin-bottom: 0.75rem;
-    resize: none;
-  }
-
-  .send-note {
-    font-size: 0.65rem;
-    color: var(--muted);
-    margin-top: 0.75rem;
-    line-height: 1.6;
-  }
-
-  .receipt-preview {
-    background: white;
-    border-radius: 2px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-    padding: 1.25rem;
-    font-size: 0.72rem;
-    line-height: 1.6;
-    margin: 1rem 0;
-    display: none;
-  }
-
-  .receipt-preview::before {
-    content: '';
-    display: block;
-    height: 6px;
-    margin: -1.25rem -1.25rem 1rem;
-    background: repeating-linear-gradient(90deg, transparent, transparent 5px, var(--paper) 5px, var(--paper) 7px);
-  }
-
-  /* AUTH PAGE */
-  #auth-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: calc(100vh - 57px);
-    padding: 2rem 1.5rem;
-    gap: 2rem;
-  }
-
+  .wrap { max-width: 480px; margin: 0 auto; padding: 2rem 1.5rem; }
+  .profile-header { margin-bottom: 2rem; }
+  .profile-display-name { font-family: 'Fraunces', serif; font-weight: 200; font-style: italic; font-size: 2rem; letter-spacing: -0.02em; margin-bottom: 0.25rem; }
+  .profile-username { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.08em; }
+  .profile-bio { margin-top: 1rem; font-size: 0.8rem; line-height: 1.8; color: var(--ink); white-space: pre-wrap; }
+  .profile-logo { width: 100%; max-height: 160px; object-fit: contain; margin-bottom: 1.5rem; display: none; }
+  .receipt-divider { border: none; border-top: 1px dashed var(--rule); margin: 1.5rem 0; }
+  .send-box { background: var(--paper2); border: 1px solid var(--rule); border-radius: var(--radius); padding: 1.25rem; }
+  .send-box h2 { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-family: 'DM Mono', monospace; font-style: normal; font-weight: 400; margin-bottom: 0.75rem; }
+  .send-box textarea { min-height: 100px; margin-bottom: 0.75rem; resize: none; }
+  .send-note { font-size: 0.65rem; color: var(--muted); margin-top: 0.75rem; line-height: 1.6; }
+  #auth-page { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 57px); padding: 2rem 1.5rem; gap: 2rem; }
   .auth-header { text-align: center; }
   .auth-header p { color: var(--muted); font-size: 0.75rem; margin-top: 0.5rem; }
-
-  .auth-box {
-    width: 100%;
-    max-width: 320px;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .mode-toggle {
-    display: flex;
-    gap: 0.5rem;
-    font-size: 0.7rem;
-    justify-content: center;
-    color: var(--muted);
-  }
-
-  .mode-toggle button {
-    background: none;
-    border: none;
-    color: var(--ink);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    cursor: pointer;
-    text-decoration: underline;
-    padding: 0;
-  }
-
-  .password-note {
-    font-size: 0.65rem;
-    color: var(--muted);
-    line-height: 1.6;
-    display: none;
-  }
-
-  /* NOT FOUND */
-  #notfound-page {
-    display: none;
-    text-align: center;
-    padding: 4rem 1.5rem;
-  }
+  .auth-box { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 1rem; }
+  .mode-toggle { display: flex; gap: 0.5rem; font-size: 0.7rem; justify-content: center; color: var(--muted); }
+  .mode-toggle button { background: none; border: none; color: var(--ink); font-family: 'DM Mono', monospace; font-size: 0.7rem; cursor: pointer; text-decoration: underline; padding: 0; }
+  .password-note { font-size: 0.65rem; color: var(--muted); line-height: 1.6; display: none; }
+  #notfound-page { text-align: center; padding: 4rem 1.5rem; }
   #notfound-page p { color: var(--muted); font-size: 0.75rem; margin-top: 0.5rem; }
-
-  /* LOADING */
-  #loading-page {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: calc(100vh - 57px);
-    color: var(--muted);
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-  }
-
-  .spinner {
-    display: inline-block;
-    animation: pulse 1.2s ease-in-out infinite;
-  }
+  #loading-page { display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 57px); color: var(--muted); font-size: 0.72rem; letter-spacing: 0.08em; }
+  .spinner { display: inline-block; animation: pulse 1.2s ease-in-out infinite; }
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 </style>
 </head>
 <body>
 
 <header class="site-header">
-  <div>
-    <h1>Thermal Cuties</h1>
-  </div>
+  <h1>Thermal Cuties</h1>
   <p>receipt printer messaging network</p>
 </header>
 
-<!-- LOADING -->
-<div id="loading-page">
-  <span class="spinner">loading...</span>
-</div>
+<div id="loading-page"><span class="spinner">loading...</span></div>
 
-<!-- PROFILE PAGE -->
-<div id="profile-page">
+<div id="profile-page" style="display:none">
   <div class="wrap">
     <img id="profile-logo" class="profile-logo" alt="logo">
     <div class="profile-header">
@@ -302,49 +79,44 @@
       <div class="profile-username" id="profile-username"></div>
       <div class="profile-bio" id="profile-bio"></div>
     </div>
-
     <hr class="receipt-divider">
-
     <div class="send-box">
       <h2>Send a message to their printer</h2>
       <div id="send-auth-gate">
-        <p style="font-size:0.75rem; color:var(--muted); margin-bottom:0.75rem;">Sign in to send a message that prints directly on their thermal printer.</p>
-        <button class="btn btn-primary btn-full" onclick="showAuthModal()">Sign in to send →</button>
+        <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.75rem;">Sign in to send a message that prints directly on their thermal printer.</p>
+        <button class="btn btn-primary btn-full" onclick="showAuthModal()">Sign in to send &rarr;</button>
       </div>
       <div id="send-form" style="display:none">
         <textarea id="message-text" placeholder="Write something to print..."></textarea>
         <div class="error" id="send-error"></div>
         <div class="success" id="send-success"></div>
-        <button class="btn btn-primary btn-full" id="send-btn" onclick="sendMessage()">Send to printer →</button>
-        <p class="send-note">Your message will print on their receipt printer. Keep it kind ✦</p>
+        <button class="btn btn-primary btn-full" id="send-btn" onclick="sendMessage()">Send to printer &rarr;</button>
+        <p class="send-note">Your message will print on their receipt printer. Keep it kind &#10022;</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- NOT FOUND -->
-<div id="notfound-page">
+<div id="notfound-page" style="display:none">
   <div class="wrap">
     <h1>404</h1>
     <p>That user doesn't exist (yet).</p>
     <br>
-    <a href="/" class="btn btn-ghost">← Back</a>
+    <a href="/" class="btn btn-ghost">&larr; Back</a>
   </div>
 </div>
 
-<!-- AUTH PAGE (sign in / sign up) -->
 <div id="auth-page" style="display:none">
   <div class="auth-header">
     <h1>Thermal Cuties</h1>
     <p>receipt printer messaging network</p>
   </div>
-
   <div class="auth-box">
     <div class="field">
       <label class="label">Email</label>
       <input type="email" id="auth-email" placeholder="you@example.com" autocomplete="email">
     </div>
-    <div class="field" id="auth-password-field">
+    <div class="field">
       <label class="label">Password</label>
       <input type="password" id="auth-password" placeholder="••••••••">
       <span class="password-note" id="auth-password-note">Please use a unique password you don't use anywhere else.</span>
@@ -361,7 +133,6 @@
     <button class="btn btn-primary btn-full" id="auth-btn" onclick="handleAuth()">Sign in</button>
     <button class="btn btn-ghost btn-full" onclick="cancelAuth()">Cancel</button>
   </div>
-
   <div class="mode-toggle">
     <span id="auth-mode-text">Don't have an account?</span>
     <button onclick="toggleAuthMode()">Sign up</button>
@@ -369,28 +140,30 @@
 </div>
 
 <script type="module">
-  // ── CONFIG ──────────────────────────────────────────────
   const SUPABASE_URL = 'https://puxihhbpeuywtwycikkn.supabase.co'
   const SUPABASE_ANON_KEY = 'sb_publishable_7PTURw6Eb0HQBxkxdq9-Yg_b5RzrbdO'
-
-  // ── SUPABASE MINIMAL CLIENT ──────────────────────────────
   const headers = { 'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json' }
 
   async function sbGet(path) {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { headers: { ...headers, 'Authorization': `Bearer ${getToken() || SUPABASE_ANON_KEY}` } })
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+      headers: { ...headers, 'Authorization': `Bearer ${getToken() || SUPABASE_ANON_KEY}` }
+    })
     return res.json()
   }
 
   async function sbPost(path, body) {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
-      method: 'POST', headers: { ...headers, 'Authorization': `Bearer ${getToken() || SUPABASE_ANON_KEY}`, 'Prefer': 'return=representation' },
+      method: 'POST',
+      headers: { ...headers, 'Authorization': `Bearer ${getToken() || SUPABASE_ANON_KEY}`, 'Prefer': 'return=representation' },
       body: JSON.stringify(body)
     })
     return res.json()
   }
 
   async function sbAuth(action, body) {
-    const res = await fetch(`${SUPABASE_URL}/auth/v1/${action}`, { method: 'POST', headers, body: JSON.stringify(body) })
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/${action}`, {
+      method: 'POST', headers, body: JSON.stringify(body)
+    })
     return res.json()
   }
 
@@ -399,7 +172,6 @@
   function getUser() { try { return JSON.parse(localStorage.getItem('tc_user')) } catch { return null } }
   function setUser(u) { localStorage.setItem('tc_user', JSON.stringify(u)) }
 
-  // ── ROUTING ──────────────────────────────────────────────
   function show(id) {
     ['loading-page','profile-page','notfound-page','auth-page'].forEach(p => {
       document.getElementById(p).style.display = p === id ? '' : 'none'
@@ -409,51 +181,32 @@
   const username = location.pathname.replace(/^\//, '') || null
 
   async function init() {
-    if (!username) {
-      // root — show sign in / sign up
-      show('auth-page')
-      return
-    }
-
-    // fetch profile by username
+    if (!username) { show('auth-page'); return }
     const data = await sbGet(`profiles?username=eq.${encodeURIComponent(username)}&select=*`)
     if (!data || !data[0]) { show('notfound-page'); return }
-
     const profile = data[0]
     document.title = `${profile.display_name || profile.username} — Thermal Cuties`
     document.getElementById('profile-display-name').textContent = profile.display_name || profile.username
     document.getElementById('profile-username').textContent = `@${profile.username}`
     if (profile.bio) document.getElementById('profile-bio').textContent = profile.bio
-
-    // check if signed in
     const user = getUser()
     if (user) {
       document.getElementById('send-auth-gate').style.display = 'none'
       document.getElementById('send-form').style.display = ''
       window._recipientId = profile.id
     }
-
     show('profile-page')
   }
 
-  // ── AUTH ─────────────────────────────────────────────────
   let authMode = 'signin'
-  let authReturnTo = null
-
-  window.showAuthModal = function() {
-    authReturnTo = location.pathname
-    show('auth-page')
-  }
-
-  window.cancelAuth = function() {
-    if (authReturnTo) { init() } else { show('profile-page') }
-  }
+  window.showAuthModal = function() { show('auth-page') }
+  window.cancelAuth = function() { init() }
 
   window.toggleAuthMode = function() {
     authMode = authMode === 'signin' ? 'signup' : 'signin'
     const isSignup = authMode === 'signup'
     document.getElementById('auth-mode-text').textContent = isSignup ? 'Already have an account?' : "Don't have an account?"
-    document.querySelector('#auth-page .mode-toggle button').textContent = isSignup ? 'Sign in' : 'Sign up'
+    document.querySelector('.mode-toggle button').textContent = isSignup ? 'Sign in' : 'Sign up'
     document.getElementById('auth-btn').textContent = isSignup ? 'Create account' : 'Sign in'
     document.getElementById('auth-username-field').style.display = isSignup ? '' : 'none'
     document.getElementById('auth-displayname-field').style.display = isSignup ? '' : 'none'
@@ -467,76 +220,56 @@
     const btn = document.getElementById('auth-btn')
     const errEl = document.getElementById('auth-error')
     errEl.style.display = 'none'
-
     if (!email || !password) { errEl.textContent = 'Please fill in all fields'; errEl.style.display = ''; return }
-
     btn.disabled = true
     btn.textContent = authMode === 'signin' ? 'Signing in...' : 'Creating account...'
-
     if (authMode === 'signin') {
       const res = await sbAuth('token?grant_type=password', { email, password })
       if (res.error || res.error_description) {
-        errEl.textContent = res.error_description || res.error
-        errEl.style.display = ''
+        errEl.textContent = res.error_description || res.error; errEl.style.display = ''
         btn.disabled = false; btn.textContent = 'Sign in'; return
       }
-      setToken(res.access_token)
-      setUser(res.user)
+      setToken(res.access_token); setUser(res.user)
+      await init()
     } else {
       const uname = document.getElementById('auth-username').value.trim().toLowerCase()
       const dname = document.getElementById('auth-displayname').value.trim()
-      if (!uname || !dname) { errEl.textContent = 'Please fill in all fields'; errEl.style.display = ''; btn.disabled = false; btn.textContent = 'Create account'; return }
-      const res = await sbAuth('signup', { email, password, data: { username: uname, display_name: dname } })
-      if (res.error || res.error_description) {
-        errEl.textContent = res.error_description || res.error
-        errEl.style.display = ''
+      if (!uname || !dname) {
+        errEl.textContent = 'Please fill in all fields'; errEl.style.display = ''
         btn.disabled = false; btn.textContent = 'Create account'; return
       }
-const token = res.access_token || res.session?.access_token
-      const user = res.user || res.session?.user
-      if (token) {
-        setToken(token)
-        setUser(user)
+      const res = await sbAuth('signup', { email, password, data: { username: uname, display_name: dname } })
+      if (res.error || res.error_description) {
+        errEl.textContent = res.error_description || res.error; errEl.style.display = ''
+        btn.disabled = false; btn.textContent = 'Create account'; return
       }
-// redirect regardless
+      const token = res.access_token || res.session?.access_token
+      const user = res.user || res.session?.user
+      if (token) { setToken(token); setUser(user) }
       window.location.href = '/' + uname
-      return
     }
-
-    // back to profile or home
-    await init()
   }
 
-  // ── SEND MESSAGE ─────────────────────────────────────────
   window.sendMessage = async function() {
     const text = document.getElementById('message-text').value.trim()
     const btn = document.getElementById('send-btn')
     const errEl = document.getElementById('send-error')
     const okEl = document.getElementById('send-success')
     errEl.style.display = 'none'; okEl.style.display = 'none'
-
     if (!text) { errEl.textContent = 'Write something first'; errEl.style.display = ''; return }
-
     btn.disabled = true; btn.textContent = 'Sending...'
-
     const user = getUser()
     const res = await sbPost('messages', {
-      sender_id: user.id,
-      recipient_id: window._recipientId,
-      content: text,
-      status: 'queued'
+      sender_id: user.id, recipient_id: window._recipientId, content: text, status: 'queued'
     })
-
     if (res && res[0]) {
-      okEl.textContent = '✦ Sent! It\'ll print on their printer shortly.'
+      okEl.textContent = 'Sent! It will print on their printer shortly.'
       okEl.style.display = ''
       document.getElementById('message-text').value = ''
     } else {
-      errEl.textContent = 'Something went wrong. Try again.'
-      errEl.style.display = ''
+      errEl.textContent = 'Something went wrong. Try again.'; errEl.style.display = ''
     }
-
-    btn.disabled = false; btn.textContent = 'Send to printer →'
+    btn.disabled = false; btn.textContent = 'Send to printer'
   }
 
   init()
