@@ -82,17 +82,11 @@
     <hr class="receipt-divider">
     <div class="send-box">
       <h2>Send a message to their printer</h2>
-      <div id="send-auth-gate">
-        <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.75rem;">Sign in to send a message that prints directly on their thermal printer.</p>
-        <button class="btn btn-primary btn-full" onclick="showAuthModal()">Sign in to send &rarr;</button>
-      </div>
-      <div id="send-form" style="display:none">
-        <textarea id="message-text" placeholder="Write something to print..."></textarea>
-        <div class="error" id="send-error"></div>
-        <div class="success" id="send-success"></div>
-        <button class="btn btn-primary btn-full" id="send-btn" onclick="sendMessage()">Send to printer &rarr;</button>
-        <p class="send-note">Your message will print on their receipt printer. Keep it kind &#10022;</p>
-      </div>
+      <textarea id="message-text" placeholder="Write something to print..."></textarea>
+      <div class="error" id="send-error"></div>
+      <div class="success" id="send-success"></div>
+      <button class="btn btn-primary btn-full" id="send-btn" onclick="sendMessage()">Send to printer &rarr;</button>
+      <p class="send-note">Your message will print on their receipt printer. Keep it kind &#10022;</p>
     </div>
   </div>
 </div>
@@ -139,14 +133,14 @@
   </div>
 </div>
 
-<script type="module">
+<script>
   const SUPABASE_URL = 'https://puxihhbpeuywtwycikkn.supabase.co'
   const SUPABASE_ANON_KEY = 'sb_publishable_7PTURw6Eb0HQBxkxdq9-Yg_b5RzrbdO'
   const headers = { 'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json' }
 
   async function sbGet(path) {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
-      headers: { ...headers, 'Authorization': `Bearer ${getToken() || SUPABASE_ANON_KEY}` }
+      headers: { ...headers, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
     })
     return res.json()
   }
@@ -154,7 +148,7 @@
   async function sbPost(path, body) {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
       method: 'POST',
-      headers: { ...headers, 'Authorization': `Bearer ${getToken() || SUPABASE_ANON_KEY}`, 'Prefer': 'return=representation' },
+      headers: { ...headers, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Prefer': 'return=representation' },
       body: JSON.stringify(body)
     })
     return res.json()
@@ -189,12 +183,7 @@
     document.getElementById('profile-display-name').textContent = profile.display_name || profile.username
     document.getElementById('profile-username').textContent = `@${profile.username}`
     if (profile.bio) document.getElementById('profile-bio').textContent = profile.bio
-    const user = getUser()
-    if (user) {
-      document.getElementById('send-auth-gate').style.display = 'none'
-      document.getElementById('send-form').style.display = ''
-      window._recipientId = profile.id
-    }
+    window._recipientId = profile.id
     show('profile-page')
   }
 
@@ -257,7 +246,8 @@
     const okEl = document.getElementById('send-success')
     errEl.style.display = 'none'; okEl.style.display = 'none'
     if (!text) { errEl.textContent = 'Write something first'; errEl.style.display = ''; return }
-   btn.disabled = true; btn.textContent = 'Sending...'
+    if (!window._recipientId) { errEl.textContent = 'Could not find recipient.'; errEl.style.display = ''; return }
+    btn.disabled = true; btn.textContent = 'Sending...'
     const res = await sbPost('messages', {
       recipient_user_id: window._recipientId,
       text: text,
