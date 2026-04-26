@@ -37,17 +37,19 @@
   .site-header { border-bottom: 1px solid var(--rule); padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
   .site-header h1 { font-size: 1.2rem; }
   .site-header p { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .site-header-right { display: flex; align-items: center; gap: 1rem; }
+  .signed-in-as { font-size: 0.65rem; color: var(--muted); }
   .wrap { max-width: 480px; margin: 0 auto; padding: 2rem 1.5rem; }
   .profile-header { margin-bottom: 2rem; }
   .profile-display-name { font-family: 'Fraunces', serif; font-weight: 200; font-style: italic; font-size: 2rem; letter-spacing: -0.02em; margin-bottom: 0.25rem; }
   .profile-username { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.08em; }
   .profile-bio { margin-top: 1rem; font-size: 0.8rem; line-height: 1.8; color: var(--ink); white-space: pre-wrap; }
-  .profile-logo { width: 100%; max-height: 160px; object-fit: contain; margin-bottom: 1.5rem; display: none; }
   .receipt-divider { border: none; border-top: 1px dashed var(--rule); margin: 1.5rem 0; }
   .send-box { background: var(--paper2); border: 1px solid var(--rule); border-radius: var(--radius); padding: 1.25rem; }
   .send-box h2 { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-family: 'DM Mono', monospace; font-style: normal; font-weight: 400; margin-bottom: 0.75rem; }
   .send-box textarea { min-height: 100px; margin-bottom: 0.75rem; resize: none; }
   .send-note { font-size: 0.65rem; color: var(--muted); margin-top: 0.75rem; line-height: 1.6; }
+  .gate-note { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.75rem; line-height: 1.6; }
   #auth-page { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 57px); padding: 2rem 1.5rem; gap: 2rem; }
   .auth-header { text-align: center; }
   .auth-header p { color: var(--muted); font-size: 0.75rem; margin-top: 0.5rem; }
@@ -66,7 +68,10 @@
 
 <header class="site-header">
   <h1>Thermal Cuties</h1>
-  <p>receipt printer messaging network</p>
+  <div class="site-header-right">
+    <span class="signed-in-as" id="signed-in-as" style="display:none"></span>
+    <p>receipt printer messaging network</p>
+  </div>
 </header>
 
 <div id="loading-page"><span class="spinner">loading...</span></div>
@@ -82,11 +87,17 @@
     <hr class="receipt-divider">
     <div class="send-box">
       <h2>Send a message to their printer</h2>
-      <textarea id="message-text" placeholder="Write something to print..."></textarea>
-      <div class="error" id="send-error"></div>
-      <div class="success" id="send-success"></div>
-      <button class="btn btn-primary btn-full" id="send-btn" onclick="sendMessage()">Send to printer &rarr;</button>
-      <p class="send-note">Your message will print on their receipt printer. Keep it kind &#10022;</p>
+      <div id="send-auth-gate">
+        <p class="gate-note">Create a free account to send a message that prints directly on their thermal printer. No printer needed to send!</p>
+        <button class="btn btn-primary btn-full" onclick="showAuthForSend()">Sign in to send &rarr;</button>
+      </div>
+      <div id="send-form" style="display:none">
+        <textarea id="message-text" placeholder="Write something to print..."></textarea>
+        <div class="error" id="send-error"></div>
+        <div class="success" id="send-success"></div>
+        <button class="btn btn-primary btn-full" id="send-btn" onclick="sendMessage()">Send to printer &rarr;</button>
+        <p class="send-note">Your message will print on their receipt printer. Keep it kind &#10022;</p>
+      </div>
     </div>
   </div>
 </div>
@@ -103,7 +114,7 @@
 <div id="auth-page" style="display:none">
   <div class="auth-header">
     <h1>Thermal Cuties</h1>
-    <p>receipt printer messaging network</p>
+    <p id="auth-subtitle">receipt printer messaging network</p>
   </div>
   <div class="auth-box">
     <div class="field">
@@ -125,7 +136,7 @@
     </div>
     <div class="error" id="auth-error"></div>
     <button class="btn btn-primary btn-full" id="auth-btn" onclick="handleAuth()">Sign in</button>
-    <button class="btn btn-ghost btn-full" onclick="cancelAuth()">Cancel</button>
+    <button class="btn btn-ghost btn-full" id="auth-cancel-btn" onclick="cancelAuth()">Cancel</button>
   </div>
   <div class="mode-toggle">
     <span id="auth-mode-text">Don't have an account?</span>
@@ -136,19 +147,22 @@
 <script>
   const SUPABASE_URL = 'https://puxihhbpeuywtwycikkn.supabase.co'
   const SUPABASE_ANON_KEY = 'sb_publishable_7PTURw6Eb0HQBxkxdq9-Yg_b5RzrbdO'
-  const headers = { 'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json' }
+  const baseHeaders = { 'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json' }
+
+  function authHeaders() {
+    const token = getToken()
+    return { ...baseHeaders, 'Authorization': `Bearer ${token || SUPABASE_ANON_KEY}` }
+  }
 
   async function sbGet(path) {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
-      headers: { ...headers, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
-    })
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { headers: authHeaders() })
     return res.json()
   }
 
   async function sbPost(path, body) {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
       method: 'POST',
-      headers: { ...headers, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`, 'Prefer': 'return=representation' },
+      headers: { ...authHeaders(), 'Prefer': 'return=representation' },
       body: JSON.stringify(body)
     })
     return res.json()
@@ -156,7 +170,7 @@
 
   async function sbAuth(action, body) {
     const res = await fetch(`${SUPABASE_URL}/auth/v1/${action}`, {
-      method: 'POST', headers, body: JSON.stringify(body)
+      method: 'POST', headers: baseHeaders, body: JSON.stringify(body)
     })
     return res.json()
   }
@@ -165,6 +179,7 @@
   function setToken(t) { localStorage.setItem('tc_token', t) }
   function getUser() { try { return JSON.parse(localStorage.getItem('tc_user')) } catch { return null } }
   function setUser(u) { localStorage.setItem('tc_user', JSON.stringify(u)) }
+  function clearAuth() { localStorage.removeItem('tc_token'); localStorage.removeItem('tc_user') }
 
   function show(id) {
     ['loading-page','profile-page','notfound-page','auth-page'].forEach(p => {
@@ -173,9 +188,15 @@
   }
 
   const username = location.pathname.replace(/^\//, '') || null
+  let _returnToProfile = false
 
   async function init() {
-    if (!username) { show('auth-page'); return }
+    if (!username) {
+      // root — show sign in/up as home
+      document.getElementById('auth-cancel-btn').style.display = 'none'
+      show('auth-page')
+      return
+    }
     const data = await sbGet(`profiles?username=eq.${encodeURIComponent(username)}&select=*`)
     if (!data || !data[0]) { show('notfound-page'); return }
     const profile = data[0]
@@ -184,14 +205,37 @@
     document.getElementById('profile-username').textContent = `@${profile.username}`
     if (profile.bio) document.getElementById('profile-bio').textContent = profile.bio
     window._recipientId = profile.id
+
+    const user = getUser()
+    if (user) {
+      document.getElementById('send-auth-gate').style.display = 'none'
+      document.getElementById('send-form').style.display = ''
+      const signedInEl = document.getElementById('signed-in-as')
+      signedInEl.textContent = `signed in`
+      signedInEl.style.display = ''
+    } else {
+      document.getElementById('send-auth-gate').style.display = ''
+      document.getElementById('send-form').style.display = 'none'
+    }
+
     show('profile-page')
   }
 
-  let authMode = 'signin'
-  window.showAuthModal = function() { show('auth-page') }
-  window.cancelAuth = function() { init() }
+  function showAuthForSend() {
+    _returnToProfile = true
+    document.getElementById('auth-subtitle').textContent = 'Sign in or create a free account to send.'
+    document.getElementById('auth-cancel-btn').style.display = ''
+    show('auth-page')
+  }
 
-  window.toggleAuthMode = function() {
+  function cancelAuth() {
+    if (_returnToProfile) { _returnToProfile = false; init() }
+    else { show('auth-page') }
+  }
+
+  let authMode = 'signin'
+
+  function toggleAuthMode() {
     authMode = authMode === 'signin' ? 'signup' : 'signin'
     const isSignup = authMode === 'signup'
     document.getElementById('auth-mode-text').textContent = isSignup ? 'Already have an account?' : "Don't have an account?"
@@ -203,7 +247,7 @@
     document.getElementById('auth-error').style.display = 'none'
   }
 
-  window.handleAuth = async function() {
+  async function handleAuth() {
     const email = document.getElementById('auth-email').value.trim()
     const password = document.getElementById('auth-password').value
     const btn = document.getElementById('auth-btn')
@@ -212,6 +256,7 @@
     if (!email || !password) { errEl.textContent = 'Please fill in all fields'; errEl.style.display = ''; return }
     btn.disabled = true
     btn.textContent = authMode === 'signin' ? 'Signing in...' : 'Creating account...'
+
     if (authMode === 'signin') {
       const res = await sbAuth('token?grant_type=password', { email, password })
       if (res.error || res.error_description) {
@@ -219,7 +264,9 @@
         btn.disabled = false; btn.textContent = 'Sign in'; return
       }
       setToken(res.access_token); setUser(res.user)
-      await init()
+      btn.disabled = false; btn.textContent = 'Sign in'
+      if (_returnToProfile) { _returnToProfile = false; await init() }
+      else { window.location.href = '/' }
     } else {
       const uname = document.getElementById('auth-username').value.trim().toLowerCase()
       const dname = document.getElementById('auth-displayname').value.trim()
@@ -235,11 +282,12 @@
       const token = res.access_token || res.session?.access_token
       const user = res.user || res.session?.user
       if (token) { setToken(token); setUser(user) }
-      window.location.href = '/' + uname
+      if (_returnToProfile) { _returnToProfile = false; await init() }
+      else { window.location.href = '/' + uname }
     }
   }
 
-  window.sendMessage = async function() {
+  async function sendMessage() {
     const text = document.getElementById('message-text').value.trim()
     const btn = document.getElementById('send-btn')
     const errEl = document.getElementById('send-error')
@@ -259,8 +307,9 @@
       document.getElementById('message-text').value = ''
     } else {
       errEl.textContent = 'Something went wrong. Try again.'; errEl.style.display = ''
+      console.error('Send error:', res)
     }
-    btn.disabled = false; btn.textContent = 'Send to printer'
+    btn.disabled = false; btn.textContent = 'Send to printer &rarr;'
   }
 
   init()
