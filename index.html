@@ -257,10 +257,11 @@
     const okEl = document.getElementById('send-success')
     errEl.style.display = 'none'; okEl.style.display = 'none'
     if (!text) { errEl.textContent = 'Write something first'; errEl.style.display = ''; return }
-    btn.disabled = true; btn.textContent = 'Sending...'
-    const user = getUser()
+   btn.disabled = true; btn.textContent = 'Sending...'
     const res = await sbPost('messages', {
-      sender_id: user.id, recipient_id: window._recipientId, content: text, status: 'queued'
+      recipient_user_id: window._recipientId,
+      text: text,
+      from_public: true
     })
     if (res && res[0]) {
       okEl.textContent = 'Sent! It will print on their printer shortly.'
