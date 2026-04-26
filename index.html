@@ -492,9 +492,13 @@
         errEl.style.display = ''
         btn.disabled = false; btn.textContent = 'Create account'; return
       }
-      if (res.access_token) {
+if (res.access_token) {
         setToken(res.access_token)
         setUser(res.user)
+        // redirect to their new profile
+        const uname = document.getElementById('auth-username').value.trim().toLowerCase()
+        window.location.href = '/' + uname
+        return
       }
     }
 
