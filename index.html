@@ -492,14 +492,15 @@
         errEl.style.display = ''
         btn.disabled = false; btn.textContent = 'Create account'; return
       }
-if (res.access_token) {
-        setToken(res.access_token)
-        setUser(res.user)
-        // redirect to their new profile
-        const uname = document.getElementById('auth-username').value.trim().toLowerCase()
-        window.location.href = '/' + uname
-        return
+const token = res.access_token || res.session?.access_token
+      const user = res.user || res.session?.user
+      if (token) {
+        setToken(token)
+        setUser(user)
       }
+// redirect regardless
+      window.location.href = '/' + uname
+      return
     }
 
     // back to profile or home
