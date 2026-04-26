@@ -78,7 +78,7 @@
 
 <div id="profile-page" style="display:none">
   <div class="wrap">
-    <img id="profile-logo" class="profile-logo" alt="logo">
+    <img id="profile-logo" class="profile-logo" alt="logo" style="display:none">
     <div class="profile-header">
       <div class="profile-display-name" id="profile-display-name"></div>
       <div class="profile-username" id="profile-username"></div>
@@ -309,7 +309,7 @@
       errEl.textContent = 'Something went wrong. Try again.'; errEl.style.display = ''
       console.error('Send error:', res)
     }
-    btn.disabled = false; btn.textContent = 'Send to printer &rarr;'
+    btn.textContent = 'Send to printer →'
   }
 
   init()
